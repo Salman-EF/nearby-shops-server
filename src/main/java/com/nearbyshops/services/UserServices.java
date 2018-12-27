@@ -29,36 +29,35 @@ public class UserServices {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public AppUser findUserByEmail(String email) {
-        AppUser appUser = userRepository.findByEmail(email);
-        if (appUser != null) logger.info("Email exists: "+email);
-        return appUser;
+        AppUser user = userRepository.findByEmail(email);
+        return user;
     }
 
-    public AppUser saveUser(AppUser appUser) {
-        // Registering new appUser:
-        // Encrypting the password specified before send to database and set appUser as enabled
-        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
-        appUser.setEnabled(true);
+    public AppUser saveUser(AppUser user) {
+        // Registering new user:
+        // Encrypting the password specified before send to database and set user as enabled
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
         Role role = roleRepository.findByRole("USER");
-        appUser.setRoles(new HashSet<>(Arrays.asList(role)));
-        userRepository.save(appUser);
-        logger.info("Save "+ appUser.toString());
+        user.setRoles(new HashSet<>(Arrays.asList(role)));
+        userRepository.save(user);
+        logger.info("Save "+ user.toString());
 
-        return appUser;
+        return user;
     }
 
-    public AppUser updateUser(AppUser appUser) {
+    public AppUser updateUser(AppUser user) {
         try {
-            userRepository.findById(appUser.getId());
-            userRepository.save(appUser);
-            logger.info("Update "+ appUser.toString());
+            userRepository.findById(user.getId());
+            userRepository.save(user);
+            logger.info("Update "+ user.toString());
         } catch(NoSuchElementException ex) {
             // AppUser not exists
-            logger.warn("AppUser: "+ appUser.getId()+", not found");
-            appUser = null;
+            logger.warn("AppUser: "+ user.getId()+", not found");
+            user = null;
         }
 
-        return appUser;
+        return user;
     }
 
     public boolean deleteUser(String userId) {

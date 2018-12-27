@@ -48,10 +48,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
         ZonedDateTime expiraionTimeUTC = ZonedDateTime.now(ZoneOffset.UTC).plus(EXPIRATION_DATE, ChronoUnit.MILLIS);
-        String token = Jwts.builder().setSubject(((User)authResult.getPrincipal()).getUsername())
+        String token = generateToken(((User)authResult.getPrincipal()).getUsername());
+        response.getWriter().write(token);
+    }
+
+    public static String generateToken(String email) {
+        ZonedDateTime expiraionTimeUTC = ZonedDateTime.now(ZoneOffset.UTC).plus(EXPIRATION_DATE, ChronoUnit.MILLIS);
+        String token = Jwts.builder().setSubject(email)
                 .setExpiration(Date.from(expiraionTimeUTC.toInstant()))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        response.getWriter().write(TOKEN_PREFIX + token);
+        return TOKEN_PREFIX + token;
     }
 }
