@@ -3,10 +3,10 @@
  **/
 package com.nearbyshops.repositories;
 
-import com.nearbyshops.models.User;
+import com.nearbyshops.models.AppUser;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<AppUser, String> {
 
-    User findByEmail(String email);
+    AppUser findByEmail(String email);
 }

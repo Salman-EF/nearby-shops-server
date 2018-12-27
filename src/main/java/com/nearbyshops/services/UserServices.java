@@ -3,19 +3,21 @@
  **/
 package com.nearbyshops.services;
 
+import com.nearbyshops.models.AppUser;
 import com.nearbyshops.models.Role;
-import com.nearbyshops.models.User;
 import com.nearbyshops.repositories.RoleRepository;
 import com.nearbyshops.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 
+@Service
 public class UserServices {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServices.class);
@@ -26,29 +28,37 @@ public class UserServices {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
-        Role role = roleRepository.findByRole("USER");
-        user.setRoles(new HashSet<>(Arrays.asList(role)));
-        userRepository.save(user);
-        logger.info("Save "+user.toString());
-
-        return user;
+    public AppUser findUserByEmail(String email) {
+        AppUser appUser = userRepository.findByEmail(email);
+        if (appUser != null) logger.info("Email exists: "+email);
+        return appUser;
     }
 
-    public User updateUser(User user) {
+    public AppUser saveUser(AppUser appUser) {
+        // Registering new appUser:
+        // Encrypting the password specified before send to database and set appUser as enabled
+        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
+        appUser.setEnabled(true);
+        Role role = roleRepository.findByRole("USER");
+        appUser.setRoles(new HashSet<>(Arrays.asList(role)));
+        userRepository.save(appUser);
+        logger.info("Save "+ appUser.toString());
+
+        return appUser;
+    }
+
+    public AppUser updateUser(AppUser appUser) {
         try {
-            userRepository.findById(user.getId());
-            userRepository.save(user);
-            logger.info("Update "+user.toString());
+            userRepository.findById(appUser.getId());
+            userRepository.save(appUser);
+            logger.info("Update "+ appUser.toString());
         } catch(NoSuchElementException ex) {
-            // User not exists
-            logger.warn("User: "+user.getId()+", not found");
-            user = null;
+            // AppUser not exists
+            logger.warn("AppUser: "+ appUser.getId()+", not found");
+            appUser = null;
         }
 
-        return user;
+        return appUser;
     }
 
     public boolean deleteUser(String userId) {
@@ -59,8 +69,8 @@ public class UserServices {
             userRepository.deleteById(userId);
             deletingStatus = true;
         } catch(NoSuchElementException ex) {
-            // User not exists
-            logger.warn("User: "+userId+", not found");
+            // AppUser not exists
+            logger.warn("AppUser: "+userId+", not found");
         }
         return deletingStatus;
     }
