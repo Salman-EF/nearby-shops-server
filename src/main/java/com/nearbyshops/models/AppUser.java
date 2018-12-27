@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Set;
 
 @Document("users")
-public class User {
+public class AppUser {
 
     @Id
     private String id;
@@ -20,12 +20,17 @@ public class User {
     @DBRef
     Set<Role> roles;
 
-    public User(){}
-    public User(String id) { this.id = id; }
-    public User(String id, String email, String password) {
+    public AppUser(){}
+    public AppUser(String id) { this.id = id; }
+    public AppUser(String id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
+    }
+    public AppUser(String email, String password, Set<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public String getId() { return id; }
@@ -45,7 +50,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "AppUser{" +
                 "id='" + id + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
