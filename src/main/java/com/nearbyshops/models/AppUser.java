@@ -19,6 +19,8 @@ public class AppUser {
     private boolean enabled;
     @DBRef
     Set<Role> roles;
+    @DBRef
+    Set<Shop> preferredShops;
 
     public AppUser(){}
     public AppUser(String id) { this.id = id; }
@@ -47,6 +49,9 @@ public class AppUser {
 
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
+
+    public Set<Shop> getPreferredShops() { return preferredShops; }
+    public void setPreferredShops(Set<Shop> preferredShops) { this.preferredShops = preferredShops; }
 
     @Override
     public String toString() {
