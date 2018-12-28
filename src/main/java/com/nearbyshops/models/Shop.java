@@ -4,6 +4,7 @@
 package com.nearbyshops.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("shops")
@@ -15,10 +16,10 @@ public class Shop {
     private String name;
     private String email;
     private String city;
-    private Location location;
+    private GeoJsonPoint location;
 
     public Shop() { }
-    public Shop(String id, String picture, String name, String email, String city, Location location) {
+    public Shop(String id, String picture, String name, String email, String city, GeoJsonPoint location) {
         this.id = id;
         this.picture = picture;
         this.name = name;
@@ -67,11 +68,11 @@ public class Shop {
         this.city = city;
     }
 
-    public Location getLocation() {
+    public GeoJsonPoint getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(GeoJsonPoint location) {
         this.location = location;
     }
 }
