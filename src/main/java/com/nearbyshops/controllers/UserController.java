@@ -31,7 +31,6 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserServices.class);
     @Autowired
     UserServices userServices;
-
     @Autowired
     protected AuthenticationManager authenticationManager;
 

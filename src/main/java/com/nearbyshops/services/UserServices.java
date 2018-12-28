@@ -10,6 +10,7 @@ import com.nearbyshops.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,13 @@ public class UserServices {
 
     public AppUser findUserByEmail(String email) {
         AppUser user = userRepository.findByEmail(email);
+        logger.info("User by email: "+ user.toString());
+        return user;
+    }
+
+    public AppUser userAuthenticated() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        AppUser user = findUserByEmail(email);
         return user;
     }
 

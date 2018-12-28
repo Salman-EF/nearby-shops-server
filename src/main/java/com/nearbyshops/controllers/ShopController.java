@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class ShopController {
@@ -28,5 +29,11 @@ public class ShopController {
     public List<Shop> nearestShops(@RequestParam double lat,@RequestParam double lon,@RequestParam double distance) {
         // Get all nearest shops within distance specified by request distance parameter
         return shopServices.nearestShops(lat,lon,distance);
+    }
+
+    @GetMapping("/api/shops/preferred")
+    public Set<Shop> preferredShops() {
+        // Get user preferred shops
+        return shopServices.userPreferredShops();
     }
 }
