@@ -14,8 +14,11 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 public class ShopServices {
@@ -33,10 +36,21 @@ public class ShopServices {
     }
 
     public List<Shop> nearestShops(double lat, double lon, double distance) {
-        List<Shop> shops = shopRepository.findByLocationNear(new Point(lat,lon), new Distance(distance, Metrics.KILOMETERS));
-        AppUser user = userServices.authenticatedUser();
-        logger.info("Find "+shops.size()+" shops within "+distance+"KM distance");
-        return shops;
+        // Because the shops list should be displayed without preferred ones we'll clear shops list from preferred shops
+        // Get all nearest shops
+        List<Shop> allShops = shopRepository.findByLocationNear(new Point(lat,lon), new Distance(distance, Metrics.KILOMETERS));
+        // Get the preferred shops
+        List<Shop> preferredShops = userPreferredShops();
+        // The magic happen here
+        for(Shop preferredShop:preferredShops) {
+            for(Shop shop:allShops) {
+                if (preferredShop.getId().equals(shop.getId())) {
+                    allShops.remove(shop);break;
+                }
+            }
+        }
+        logger.info("Find "+allShops.size()+" shops within "+distance+"KM distance");
+        return allShops;
     }
 
     public List<Shop> userPreferredShops() {
