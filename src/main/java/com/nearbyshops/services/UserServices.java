@@ -31,13 +31,13 @@ public class UserServices {
 
     public AppUser findUserByEmail(String email) {
         AppUser user = userRepository.findByEmail(email);
-        logger.info("User by email: "+ user.toString());
         return user;
     }
 
     public AppUser authenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         AppUser user = findUserByEmail(email);
+        logger.info("authenticatedUser: "+ user.toString());
         return user;
     }
 
