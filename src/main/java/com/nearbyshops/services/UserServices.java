@@ -81,4 +81,21 @@ public class UserServices {
         }
         return deletingStatus;
     }
+
+    public AppUser updatePassword(String oldPass, String newPass) {
+        AppUser user = null;
+        try {
+            AppUser userToUpdate = authenticatedUser();
+            if (userToUpdate.getPassword().equals(bCryptPasswordEncoder.encode(oldPass))) {
+                userToUpdate.setPassword(bCryptPasswordEncoder.encode(newPass));
+                userRepository.save(userToUpdate);
+                user = userToUpdate;
+                logger.info("Update Password for: "+ userToUpdate.toString());
+            }
+        } catch(NoSuchElementException ex) {
+            // AppUser not exists
+            logger.warn("AppUser: "+ user.getEmail()+", not found");
+        }
+        return user;
+    }
 }
