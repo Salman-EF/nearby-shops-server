@@ -34,12 +34,44 @@ public class ShopServices {
 
     public List<Shop> nearestShops(double lat, double lon, double distance) {
         List<Shop> shops = shopRepository.findByLocationNear(new Point(lat,lon), new Distance(distance, Metrics.KILOMETERS));
+        AppUser user = userServices.authenticatedUser();
         logger.info("Find "+shops.size()+" shops within "+distance+"KM distance");
         return shops;
     }
 
-    public Set<Shop> userPreferredShops() {
-        AppUser user = userServices.userAuthenticated();
+    public List<Shop> userPreferredShops() {
+        AppUser user = userServices.authenticatedUser();
+        return user.getPreferredShops();
+    }
+
+    public List<Shop> addPreferredShop(String shop_id) {
+        // Get the authenticated user
+        AppUser user = userServices.authenticatedUser();
+        // Filter the user preferredShops list if this shop already exist in it --- Until now I didn't figure out why but the list.contains() function won't work here!!
+        Shop shopExist = user.getPreferredShops().stream().filter(shop -> shop_id.equals(shop.getId())).findAny().orElse(null);
+        // If the filter return null means that this shop not exist in the user preferredShops
+        if (shopExist==null) {
+            // Get the shop added
+            Shop shopAdded = shopRepository.findById(shop_id).get();
+            // Add the shop to the user preferredShopsList
+            user.getPreferredShops().add(shopAdded);
+            // Save the user changes
+            userServices.saveUser(user);
+            logger.info("Added new preferred shop: "+shopAdded.getName());
+        }
+        logger.info("Preferred shops: "+user.getPreferredShops().size());
+        return user.getPreferredShops();
+    }
+
+    public List<Shop> removePreferredShop(String shop_id) {
+        // Get the authenticated user
+        AppUser user = userServices.authenticatedUser();
+        // Filter the user preferredShops list and delete shop by id
+        user.getPreferredShops().removeIf(shop -> shop_id.equals(shop.getId()));
+        // Save the user changes
+        userServices.saveUser(user);
+        logger.info("Remove preferred shop: "+shop_id);
+        logger.info("Preferred shops: "+user.getPreferredShops().size());
         return user.getPreferredShops();
     }
 }

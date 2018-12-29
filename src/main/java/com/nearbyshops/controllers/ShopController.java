@@ -6,12 +6,9 @@ package com.nearbyshops.controllers;
 import com.nearbyshops.models.Shop;
 import com.nearbyshops.services.ShopServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class ShopController {
@@ -32,8 +29,18 @@ public class ShopController {
     }
 
     @GetMapping("/api/shops/preferred")
-    public Set<Shop> preferredShops() {
+    public List<Shop> preferredShops() {
         // Get user preferred shops
         return shopServices.userPreferredShops();
+    }
+
+    @PostMapping("/api/shops/preferred")
+    public List<Shop> addPreferredShop(@RequestBody Shop shop) {
+        return shopServices.addPreferredShop(shop.getId());
+    }
+
+    @DeleteMapping("/api/shops/preferred")
+    public List<Shop> removePreferredShop(@RequestBody Shop shop) {
+        return shopServices.removePreferredShop(shop.getId());
     }
 }
