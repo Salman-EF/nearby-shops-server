@@ -34,7 +34,7 @@ public class ShopServices {
     public List<Shop> nearestShops(double lat, double lon, double distance) {
         // Because the shops list should be displayed without preferred ones we'll clear shops list from preferred shops
         // Get all nearest shops
-        List<Shop> allShops = shopRepository.findByLocationNear(new Point(lat,lon), new Distance(distance, Metrics.KILOMETERS));
+        List<Shop> allShops = shopRepository.findByLocationNear(new Point(lon,lat), new Distance(distance, Metrics.KILOMETERS));
         // Get the preferred shops
         List<Shop> preferredShops = userPreferredShops();
         // The magic happen here
