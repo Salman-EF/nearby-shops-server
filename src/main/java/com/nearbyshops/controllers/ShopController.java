@@ -6,6 +6,7 @@ package com.nearbyshops.controllers;
 import com.nearbyshops.models.Shop;
 import com.nearbyshops.services.ShopServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public class ShopController {
     }
 
     @GetMapping("/api/shops/nearest")
-    public List<Shop> nearestShops(@RequestParam double lat,@RequestParam double lon,@RequestParam double distance) {
+    public ResponseEntity<List<Shop>> nearestShops(@RequestParam double lat, @RequestParam double lon, @RequestParam double distance) {
         // Get all nearest shops within distance specified by request distance parameter
-        return shopServices.nearestShops(lat,lon,distance);
+        return ResponseEntity.ok(shopServices.nearestShops(lat,lon,distance));
     }
 
     @GetMapping("/api/shops/preferred")
