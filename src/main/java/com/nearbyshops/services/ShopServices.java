@@ -66,7 +66,7 @@ public class ShopServices {
             // Add the shop to the user preferredShopsList
             user.getPreferredShops().add(shopAdded);
             // Save the user changes
-            userServices.saveUser(user);
+            userServices.updateUser(user);
             logger.info("Added new preferred shop: "+shopAdded.getName());
         }
         logger.info("Preferred shops: "+user.getPreferredShops().size());
@@ -79,8 +79,7 @@ public class ShopServices {
         // Filter the user preferredShops list and delete shop by id
         user.getPreferredShops().removeIf(shop -> shop_id.equals(shop.getId()));
         // Save the user changes
-        userServices.saveUser(user);
-        logger.info("Remove preferred shop: "+shop_id);
+        userServices.updateUser(user);
         logger.info("Preferred shops: "+user.getPreferredShops().size());
         return user.getPreferredShops();
     }
