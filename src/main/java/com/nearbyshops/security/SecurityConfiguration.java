@@ -16,7 +16,8 @@ import static com.nearbyshops.security.SecurityConstants.USER;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
-	private final CustomUserDetailsService customUserDetailsService;
+	@Autowired
+	CustomUserDetailsService customUserDetailsService;
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -30,18 +31,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
             .userDetailsService(this.customUserDetailsService)
 			.passwordEncoder(bCryptPasswordEncoder);
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http
-            .cors().and()
+            .cors()
+			.and()
 			.authorizeRequests()
-			.antMatchers("/", "/api/register", "/login").permitAll()
+			.antMatchers("/api/register", "/login").permitAll()
 			.antMatchers("/api/users/**", "/api/shops/**").hasAnyAuthority(USER,ADMIN)
-			.anyRequest().authenticated()
-			.and().csrf().disable()
+			.anyRequest().authenticated().and().httpBasic().and().csrf().disable()
 			.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-			.addFilter(new JWTAuthorizationFilter(authenticationManager(), customUserDetailsService))
-			.rememberMe();
+			.addFilter(new JWTAuthorizationFilter(authenticationManager(), customUserDetailsService));
 	}
 }

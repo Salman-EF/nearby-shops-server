@@ -10,10 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class UserController {
@@ -33,8 +40,8 @@ public class UserController {
             AppUser userSaved = userServices.saveUser(user);
             // Generate and return access_token automatically after successfully register
             if (userSaved!=null) {
-                String token = JWTAuthenticationFilter.generateToken(userSaved.getEmail());
-                return ResponseEntity.ok().body(token);
+                String jwt = JWTAuthenticationFilter.generateToken(userSaved.getEmail());
+                return ResponseEntity.ok().body(jwt);
             }
             return ResponseEntity.badRequest().body("error-other");
         }
@@ -43,5 +50,17 @@ public class UserController {
     @GetMapping("/api/users/me")
     public String authenticatedUser() {
         return userServices.authenticatedUser().getEmail();
+    }
+
+    @PostMapping("/api/logout")
+    public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response){
+        HttpSession session= request.getSession(false);
+        SecurityContextHolder.clearContext();
+        session= request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
+
+        return ResponseEntity.ok("logout");
     }
 }
