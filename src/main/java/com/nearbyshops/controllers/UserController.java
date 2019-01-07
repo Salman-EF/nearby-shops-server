@@ -29,6 +29,20 @@ public class UserController {
     @Autowired
     UserServices userServices;
 
+    // @PostMapping("/api/login")
+    public ResponseEntity<?> login(@RequestBody AppUser user) {
+        AppUser userFound = userServices.findUserByEmailAndPass(user);
+        System.out.println("User: "+userFound.toString());
+        if (userFound != null) {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Authentication authStatus = SecurityContextHolder.getContext().getAuthentication();
+
+            return ResponseEntity.ok(JWTAuthenticationFilter.generateToken(authStatus.getName()));
+        }
+        return null;
+    }
+
     @PostMapping("/api/register")
     public ResponseEntity<?> register(@RequestBody AppUser user) {
         // Checking first if the email already exists
