@@ -33,6 +33,13 @@ public class UserServices {
         AppUser user = userRepository.findByEmail(email);
         return user;
     }
+    public AppUser findUserByEmailAndPass(AppUser user) {
+        AppUser userFound = userRepository.findByEmail(user.getEmail());
+        if (userFound!=null && bCryptPasswordEncoder.matches(user.getPassword(),userFound.getPassword())) {
+            return userFound;
+        }
+        return null;
+    }
 
     public AppUser authenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
