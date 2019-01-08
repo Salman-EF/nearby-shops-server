@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,7 @@ public class ShopController {
     }
 
     @PostMapping("/api/shops/disliked")
-    public HashMap<String, Date> dislikeShop(@RequestBody Shop shop) {
-        return shopServices.dislikeShop(shop.getId());
+    public List dislikeShop(@RequestBody Shop shop) {
+        return new ArrayList(shopServices.dislikeShop(shop.getId()).keySet());
     }
 }
