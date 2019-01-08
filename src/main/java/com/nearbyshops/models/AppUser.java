@@ -7,9 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Document("users")
 public class AppUser {
@@ -22,7 +20,8 @@ public class AppUser {
     @DBRef
     Set<Role> roles;
     @DBRef
-    List<Shop> preferredShops = new ArrayList<>();
+    List<Shop> preferredShops;
+    HashMap<Shop, Date> dislikedShops;
 
     public AppUser(){}
     public AppUser(String id) { this.id = id; }
@@ -54,6 +53,9 @@ public class AppUser {
 
     public List<Shop> getPreferredShops() { return preferredShops; }
     public void setPreferredShops(List<Shop> preferredShops) { this.preferredShops = preferredShops; }
+
+    public HashMap<Shop, Date> getDislikedShops() { return dislikedShops; }
+    public void setDislikedShops(HashMap<Shop, Date> dislikedShops) { this.dislikedShops = dislikedShops; }
 
     @Override
     public String toString() {
