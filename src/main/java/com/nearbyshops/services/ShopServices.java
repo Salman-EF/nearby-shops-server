@@ -14,6 +14,8 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -82,5 +84,24 @@ public class ShopServices {
         userServices.updateUser(user);
         logger.info("Preferred shops: "+user.getPreferredShops().size());
         return user.getPreferredShops();
+    }
+
+    public HashMap<Shop, Date> dislikeShop(String shop_id) {
+        // Get the authenticated user
+        AppUser user = userServices.authenticatedUser();
+        // shop already exist in it
+        Shop shopDisliked = shopRepository.findById(shop_id).get();
+        // If the filter return null means that this shop not exist
+        if (shopDisliked!=null) {
+            // Add the shop to the user preferredShopsList
+            HashMap<Shop, Date> dislikedShops = user.getDislikedShops();
+            dislikedShops.put(shopDisliked, new Date());
+            user.setDislikedShops(dislikedShops);
+            // Save the user changes
+            userServices.updateUser(user);
+            logger.info("shopDisliked: "+shopDisliked.getId());
+        }
+        logger.info("Disliked shops: "+user.getDislikedShops().size());
+        return user.getDislikedShops();
     }
 }
