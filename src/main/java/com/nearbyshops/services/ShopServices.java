@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ShopServices {
@@ -96,12 +98,21 @@ public class ShopServices {
             // Add the shop to the user preferredShopsList
             HashMap<String, Date> dislikedShops = user.getDislikedShops();
             dislikedShops.put(shopDisliked.getId(), new Date());
-            user.setDislikedShops(dislikedShops);
+            user.setDislikedShops((HashMap<String, Date>) refreshDislikedShops(dislikedShops));
             // Save the user changes
             userServices.updateUser(user);
-            logger.info("shopDisliked: "+shopDisliked.getId());
         }
         logger.info("Disliked shops: "+user.getDislikedShops().size());
         return user.getDislikedShops();
+    }
+
+    // Custom function for refreshing DislikedShops list and filtering it from shops disliked more than 2 hours ago
+    private Map<String, Date> refreshDislikedShops(HashMap<String, Date> shopsList) {
+        return shopsList.entrySet().stream()
+                .filter(map -> { // Get the difference between the date & time now and dislike time
+                    double hoursBetween = (new Date().getTime() - map.getValue().getTime()) / 36e5;
+                    return hoursBetween < 2;
+                } )
+                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
     }
 }
