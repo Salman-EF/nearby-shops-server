@@ -21,7 +21,7 @@ public class AppUser {
     Set<Role> roles;
     @DBRef
     List<Shop> preferredShops;
-    HashMap<Shop, Date> dislikedShops;
+    HashMap<String, Date> dislikedShops = new HashMap<>();
 
     public AppUser(){}
     public AppUser(String id) { this.id = id; }
@@ -54,8 +54,8 @@ public class AppUser {
     public List<Shop> getPreferredShops() { return preferredShops; }
     public void setPreferredShops(List<Shop> preferredShops) { this.preferredShops = preferredShops; }
 
-    public HashMap<Shop, Date> getDislikedShops() { return dislikedShops; }
-    public void setDislikedShops(HashMap<Shop, Date> dislikedShops) { this.dislikedShops = dislikedShops; }
+    public HashMap<String, Date> getDislikedShops() { return dislikedShops; }
+    public void setDislikedShops(HashMap<String, Date> dislikedShops) { this.dislikedShops = dislikedShops; }
 
     @Override
     public String toString() {

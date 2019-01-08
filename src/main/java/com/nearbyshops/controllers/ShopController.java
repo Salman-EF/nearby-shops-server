@@ -48,7 +48,7 @@ public class ShopController {
     }
 
     @PostMapping("/api/shops/disliked")
-    public HashMap<Shop, Date> dislikeShop(@RequestBody Shop shop) {
+    public HashMap<String, Date> dislikeShop(@RequestBody Shop shop) {
         return shopServices.dislikeShop(shop.getId());
     }
 }

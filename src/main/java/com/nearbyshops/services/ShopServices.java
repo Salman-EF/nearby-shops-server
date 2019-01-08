@@ -86,7 +86,7 @@ public class ShopServices {
         return user.getPreferredShops();
     }
 
-    public HashMap<Shop, Date> dislikeShop(String shop_id) {
+    public HashMap<String, Date> dislikeShop(String shop_id) {
         // Get the authenticated user
         AppUser user = userServices.authenticatedUser();
         // shop already exist in it
@@ -94,8 +94,8 @@ public class ShopServices {
         // If the filter return null means that this shop not exist
         if (shopDisliked!=null) {
             // Add the shop to the user preferredShopsList
-            HashMap<Shop, Date> dislikedShops = user.getDislikedShops();
-            dislikedShops.put(shopDisliked, new Date());
+            HashMap<String, Date> dislikedShops = user.getDislikedShops();
+            dislikedShops.put(shopDisliked.getId(), new Date());
             user.setDislikedShops(dislikedShops);
             // Save the user changes
             userServices.updateUser(user);
