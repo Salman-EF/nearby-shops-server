@@ -44,7 +44,6 @@ public class UserServices {
     public AppUser authenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         AppUser user = findUserByEmail(email);
-        logger.info("authenticatedUser: "+ user.toString());
         return user;
     }
 

@@ -14,10 +14,7 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,19 +33,28 @@ public class ShopServices {
     }
 
     public List<Shop> nearestShops(double lat, double lon, double distance) {
-        // Because the shops list should be displayed without preferred ones we'll clear shops list from preferred shops
+        // Because the shops list should be displayed without preferred or disliked ones we'll clear shops list before return to response
         // Get all nearest shops
         List<Shop> allShops = shopRepository.findByLocationNear(new Point(lon,lat), new Distance(distance, Metrics.KILOMETERS));
         // Get the preferred shops
         List<Shop> preferredShops = userPreferredShops();
+        // Get the disliked shops
+        List<String> dislikedShops = new ArrayList<>(userDislikedShops().keySet());
         // The magic happen here
-        for(Shop preferredShop:preferredShops) {
-            for(Shop shop:allShops) {
+        List<Shop> shopsToRemove = new ArrayList();
+        for (Shop shop:allShops) {
+            for(Shop preferredShop:preferredShops) {
                 if (preferredShop.getId().equals(shop.getId())) {
-                    allShops.remove(shop);break;
+                    shopsToRemove.add(shop);
+                }
+            }
+            for (String dislikedId : dislikedShops) {
+                if (dislikedId.equals(shop.getId())) {
+                    shopsToRemove.add(shop);
                 }
             }
         }
+        allShops.removeAll(shopsToRemove);
         logger.info("Find "+allShops.size()+" shops within "+distance+"KM distance");
         return allShops;
     }
@@ -56,6 +62,13 @@ public class ShopServices {
     public List<Shop> userPreferredShops() {
         AppUser user = userServices.authenticatedUser();
         return user.getPreferredShops();
+    }
+
+    public HashMap<String, Date> userDislikedShops() {
+        AppUser user = userServices.authenticatedUser();
+        user.setDislikedShops(refreshDislikedShops(user.getDislikedShops()));
+        userServices.updateUser(user);
+        return user.getDislikedShops();
     }
 
     public List<Shop> addPreferredShop(String shop_id) {
@@ -98,7 +111,7 @@ public class ShopServices {
             // Add the shop to the user preferredShopsList
             HashMap<String, Date> dislikedShops = user.getDislikedShops();
             dislikedShops.put(shopDisliked.getId(), new Date());
-            user.setDislikedShops((HashMap<String, Date>) refreshDislikedShops(dislikedShops));
+            user.setDislikedShops(refreshDislikedShops(dislikedShops));
             // Save the user changes
             userServices.updateUser(user);
         }
@@ -107,12 +120,14 @@ public class ShopServices {
     }
 
     // Custom function for refreshing DislikedShops list and filtering it from shops disliked more than 2 hours ago
-    private Map<String, Date> refreshDislikedShops(HashMap<String, Date> shopsList) {
-        return shopsList.entrySet().stream()
-                .filter(map -> { // Get the difference between the date & time now and dislike time
-                    double hoursBetween = (new Date().getTime() - map.getValue().getTime()) / 36e5;
-                    return hoursBetween < 2;
-                } )
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+    private HashMap<String, Date> refreshDislikedShops(HashMap<String, Date> shopsList) {
+        HashMap<String, Date> listRefreshed = (HashMap<String, Date>)
+                shopsList.entrySet().stream()
+                        .filter(map -> { // Get the difference between the date & time now and dislike time
+                            double hoursBetween = (new Date().getTime() - map.getValue().getTime()) / 36e5;
+                            return hoursBetween < 2;
+                        } )
+                        .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+        return listRefreshed;
     }
 }
