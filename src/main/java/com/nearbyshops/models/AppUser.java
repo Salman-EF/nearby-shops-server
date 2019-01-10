@@ -20,7 +20,7 @@ public class AppUser {
     @DBRef
     Set<Role> roles;
     @DBRef
-    List<Shop> preferredShops;
+    List<Shop> preferredShops = new ArrayList<>();
     HashMap<String, Date> dislikedShops = new HashMap<>();
 
     public AppUser(){}
