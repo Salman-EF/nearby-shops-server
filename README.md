@@ -87,16 +87,16 @@ body    { "id": "<shop_id>"}
 ## Local mongoDB
 If you want to setup a local database and connect it with the application there are some requirements so you won't have a problem :
 
-##### Configuring mongoDB database
+##### 1. Configuring mongoDB database
 Firstly, You need to have mongoDB installed in your system,
 checkout the [official mongodb doc](https://docs.mongodb.com/manual/administration/install-community/).
-##### Shops collection Data
+##### 2. Shops collection Data
 You need to extract [this zip file](https://github.com/hiddenfounders/web-internship-cc/blob/master/dump-shops.zip) then execute :
 ```
 mongorestore --db <databse-name> shops/
 ```
 →→ A database will be created with the <databse-name> and shops collection.
-##### Application database properties
+##### 3. Application database properties
 Change mongoDB properties inside the application:properties
 ```properties
 spring.data.mongodb.host=<default: localhost>
