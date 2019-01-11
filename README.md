@@ -35,13 +35,13 @@ The server will start at http://localhost:8080.
 These are all the requests this API wait for :
 
 ##### 1. Authentication / JWT security
-Sign Up : To create a new user account and Json object with email and password required.
+* Sign Up :
 ```
 POST    http://localhost:8080/api/register
 
 { "email":"user1@gmail.com", "password":"User1Pass" }
 ```
-Sign In :
+* Sign In :
 ```
 POST    http://localhost:8080/login
 
@@ -49,36 +49,36 @@ POST    http://localhost:8080/login
 ```
 After a successful sign-up or sign-in the response is a user JWT that you use in the header to access secured endpoints.
 ##### 2. Users (Secured)
-User / Me : The user email
+* User / Me : The user email
 ```
 GET    http://localhost:8080/api/users/me
 ```
 ##### 3. Shops (Secured)
-List of all Shops not the nearest neither sorted
+* List of all Shops not the nearest neither sorted :
 ```
 GET    http://localhost:8080/api/shops
 ```
-List of nearest Shops with user latitude/longitude and distance from these coordinates
+* List of nearest Shops with user latitude/longitude and distance from these coordinates, filtered from this user preferred and disliked shops.
 ```
 GET    http://localhost:8080/api/shops/nearest?lat=<latitude>&lon=<longitude>&distance=<distance>
 ```
-List of Preferred Shops of the user
+* List of Preferred Shops of the user
 ```
 GET    http://localhost:8080/api/shops/preferred
 ```
-Add a User Preferred Shop and return list of all the preferred shops
+* Add a User Preferred Shop and return list of all the preferred shops
 ```
 POST    http://localhost:8080/api/shops/preferred
 
 body    { "id": "<shop_id>"}
 ```
-Remove User Preferred Shop and return list of all the preferred shops
+* Remove User Preferred Shop and return list of all the preferred shops
 ```
 DELETE    http://localhost:8080/api/shops/preferred
 
 body    { "id": "<shop_id>"}
 ```
-Add a User Disliked Shop and return list of all the disliked shops
+* Add a User Disliked Shop and return list of all the disliked shops
 ```
 POST    http://localhost:8080/api/shops/disliked
 
