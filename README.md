@@ -12,7 +12,7 @@ For building and running the application you need:
 - [Maven 3.x.x](https://maven.apache.org)
 
 The Database it's already deployed on mongoDB Atlas cloud service but if you want to work with a local one checkout 
-[this part](##local-mongodb).
+[this part](#local-mongodb).
 
 ## Steps to Setup
 ##### 1. Clone the application
@@ -84,7 +84,7 @@ POST    http://localhost:8080/api/shops/disliked
 
 body    { "id": "<shop_id>"}
 ```
-##Local mongoDB
+## Local mongoDB
 If you want to setup a local database and connect it with the application there are some requirements so you won't have a problem :
 
 ##### Configuring mongoDB database
