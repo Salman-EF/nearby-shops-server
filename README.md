@@ -34,7 +34,7 @@ The server will start at http://localhost:8080.
 ## Work with API
 These are all the requests this API wait for :
 
-##### 1. Authentication / JWT security
+#### 1. Authentication / JWT security
 * Sign Up :
 ```
 POST    http://localhost:8080/api/register
@@ -48,12 +48,12 @@ POST    http://localhost:8080/login
 { "email":"user1@gmail.com", "password":"User1Pass" }
 ```
 After a successful sign-up or sign-in the response is a user JWT that you use in the header to access secured endpoints.
-##### 2. Users (Secured)
+#### 2. Users (Secured)
 * User / Me : The user email
 ```
 GET    http://localhost:8080/api/users/me
 ```
-##### 3. Shops (Secured)
+#### 3. Shops (Secured)
 * List of all Shops not the nearest neither sorted :
 ```
 GET    http://localhost:8080/api/shops
@@ -87,16 +87,16 @@ body    { "id": "<shop_id>"}
 ## Local mongoDB
 If you want to setup a local database and connect it with the application there are some requirements so you won't have a problem :
 
-##### 1. Configuring mongoDB database
+#### 1. Configuring mongoDB database
 Firstly, You need to have mongoDB installed in your system,
 checkout the [official mongodb doc](https://docs.mongodb.com/manual/administration/install-community/).
-##### 2. Shops collection Data
+#### 2. Shops collection Data
 You need to extract [this zip file](https://github.com/hiddenfounders/web-internship-cc/blob/master/dump-shops.zip) then execute :
 ```
 mongorestore --db <databse-name> shops/
 ```
 →→ A database will be created with the <databse-name> and shops collection.
-##### 3. Application database properties
+#### 3. Application database properties
 Change mongoDB properties inside the application:properties
 ```properties
 spring.data.mongodb.host=<default: localhost>
