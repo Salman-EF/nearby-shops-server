@@ -11,8 +11,8 @@ For building and running the application you need:
 - [JDK 1.8.x](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - [Maven 3.x.x](https://maven.apache.org)
 
-The Database it's already deployed on mongoDB Atlas cloud service but if you want to work with a local one please checkout 
-[this part](#local-mongodb).
+The Database it's already deployed on mongoDB Atlas cloud service but if you want to work with a local one checkout 
+[this part](##local-mongodb).
 
 ## Steps to Setup
 ##### 1. Clone the application
