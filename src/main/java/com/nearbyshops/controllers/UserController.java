@@ -48,7 +48,7 @@ public class UserController {
         // Checking first if the email already exists
         if (userServices.findUserByEmail(user.getEmail()) != null) {
             logger.warn("Email already used!!");
-            return ResponseEntity.badRequest().body("error-email");
+            return ResponseEntity.ok("error-email");
         } else {
             // Register the user and userServices saveUser will take care of encrypting the password
             AppUser userSaved = userServices.saveUser(user);
@@ -57,7 +57,7 @@ public class UserController {
                 String jwt = JWTAuthenticationFilter.generateToken(userSaved.getEmail());
                 return ResponseEntity.ok().body(jwt);
             }
-            return ResponseEntity.badRequest().body("error-other");
+            return ResponseEntity.ok("error-other");
         }
     }
 
