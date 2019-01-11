@@ -45,7 +45,7 @@ public class JWTAuthorizationFilter  extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(HEADER);
         if (token == null) return null;
-        String username = null;
+        String username;
         try {
             username = Jwts.parser().setSigningKey(SECRET)
                     .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
@@ -55,7 +55,7 @@ public class JWTAuthorizationFilter  extends BasicAuthenticationFilter {
             return null;
         }
         UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-        return username != null ?
+        return userDetails != null && username != null ?
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) : null;
     }
 }
