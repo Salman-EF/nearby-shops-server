@@ -4,6 +4,7 @@
 package com.nearbyshops.security;
 
 import com.nearbyshops.configuration.CustomUserDetailsService;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,10 +45,15 @@ public class JWTAuthorizationFilter  extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(HEADER);
         if (token == null) return null;
-        String username = Jwts.parser().setSigningKey(SECRET)
-                .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                .getBody()
-                .getSubject();
+        String username = null;
+        try {
+            username = Jwts.parser().setSigningKey(SECRET)
+                    .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                    .getBody()
+                    .getSubject();
+        } catch (ExpiredJwtException ex){
+            return null;
+        }
         UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
         return username != null ?
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) : null;
