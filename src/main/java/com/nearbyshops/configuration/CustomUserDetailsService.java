@@ -22,13 +22,13 @@ import java.util.Set;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    UserRepository thinkerRepository;
+    UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Spring-boot security loading user will be by email as username
-        AppUser user= thinkerRepository.findByEmail(email);
+        AppUser user= userRepository.findByEmail(email);
         if (user!= null) {
             List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
             return buildUserForAuthentication(user, authorities);
