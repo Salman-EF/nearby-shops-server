@@ -4,6 +4,8 @@ The Back-end of [Nearby shops](https://github.com/Salman-EF/nearby-shops-UI.git)
 a React app built with [MongoDB](https://www.mongodb.com/) + 
 [Java Spring-boot](http://projects.spring.io/spring-boot/) and configured with JWT security.
 
+The application on Heroku: [Nearby Shops](https://nearestshops.herokuapp.com)
+
 ## Requirements
 
 For building and running the application you need:
