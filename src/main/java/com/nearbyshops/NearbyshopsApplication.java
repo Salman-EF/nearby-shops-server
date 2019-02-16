@@ -14,20 +14,20 @@ public class NearbyshopsApplication {
 		SpringApplication.run(NearbyshopsApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner init(RoleRepository roleRepository) {
-		return args -> {
-			Role adminRole = roleRepository.findByRole("ADMIN");
-			if (adminRole == null) {
-				roleRepository.save(new Role("ADMIN"));
-			}
-
-			Role userRole = roleRepository.findByRole("USER");
-			if (userRole == null) {
-				roleRepository.save(new Role("USER"));
-			}
-		};
-
-	}
+//	@Bean
+//	CommandLineRunner init(RoleRepository roleRepository) {
+//		return args -> {
+//			Role adminRole = roleRepository.findByRole("ADMIN");
+//			if (adminRole == null) {
+//				roleRepository.save(new Role("ADMIN"));
+//			}
+//
+//			Role userRole = roleRepository.findByRole("USER");
+//			if (userRole == null) {
+//				roleRepository.save(new Role("USER"));
+//			}
+//		};
+//
+//	}
 }
 
