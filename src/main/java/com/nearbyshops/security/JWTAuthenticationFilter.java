@@ -56,7 +56,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        ZonedDateTime expiraionTimeUTC = ZonedDateTime.now(ZoneOffset.UTC).plus(EXPIRATION_DATE, ChronoUnit.MILLIS);
         String token = generateToken(((User)authResult.getPrincipal()).getUsername());
         response.getWriter().write(token);
     }
