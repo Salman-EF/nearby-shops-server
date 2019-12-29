@@ -1,10 +1,10 @@
 # Nearby Shops Back-end
 
-The Back-end of [Nearby shops](https://github.com/Salman-EF/nearby-shops-UI.git), 
+The Back-end of [Nearby shops](https://github.com/Salman-EF/nearestshops-front.git), 
 a React app built with [MongoDB](https://www.mongodb.com/) + 
 [Java Spring-boot](http://projects.spring.io/spring-boot/) and configured with JWT security.
 
-The application on Heroku: [Nearby Shops](https://nearestshops.herokuapp.com)
+The application on Heroku: [Nearby Shops server](https://nearestshops-api.herokuapp.com/)
 
 ## Requirements
 
@@ -19,7 +19,7 @@ The Database it's already deployed on mongoDB Atlas cloud service but if you wan
 ## Steps to Setup
 ##### 1. Clone the application
 ```
-git clone https://github.com/Salman-EF/nearby-shops-server.git
+git clone https://github.com/Salman-EF/nearestshops-server.git
 ```
 
 ##### 2. Build and run using maven
