@@ -97,7 +97,7 @@ You need to extract [this zip file](https://github.com/hiddenfounders/web-intern
 ```
 mongorestore --db <databse-name> shops/
 ```
-→→ A database will be created with the '<databse-name>' and shops collection.
+→→ A database will be created with the 'databse-name' and shops collection.
 #### 3. Application database properties
 Change mongoDB properties inside the application:properties
 ```properties
